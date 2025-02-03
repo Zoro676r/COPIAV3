@@ -2,15 +2,15 @@
 body {
   font-family: "Arial", sans-serif;
   background-color: #78b4f0;
-  color: #e678f0;
+  color: #333;
   text-align: center;
 }
 
 /* Widget del Clima */
 #clima-widget {
-  background-color: #030303;
-  border-radius: 20px;
-  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 30px;
+  padding: 50px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   max-width: 400px;
   margin: 20px auto;
