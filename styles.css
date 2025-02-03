@@ -1,14 +1,14 @@
 /* Estilos generales */
 body {
   font-family: "Arial", sans-serif;
-  background-color: #78b4f0;
+  background-color: #78f08c;
   color: #333;
   text-align: center;
 }
 
 /* Widget del Clima */
 #clima-widget {
-  background-color: #ffffff;
+  background-color: #fffff;
   border-radius: 30px;
   padding: 50px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
