@@ -12,8 +12,8 @@ body {
   border-radius: 15px;
   padding: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  max-width: 750px;
-  width: 220%; /* Ajusta el ancho */
+  max-width: 800px;
+  width: 250%; /* Ajusta el ancho */
   margin: 20px auto;
   display: flex;
   flex-direction: column;
