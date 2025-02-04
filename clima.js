@@ -18,7 +18,7 @@ function buscarClima() {
     climaActualDiv.innerHTML = '<p class="loading">Cargando...</p>';
 
     const pais = paisSelect.value;
-    const url = `${apiEndpoint}weather?q=${ubicacion},${pais}&units=metric&appid=${apiKey}&lang=es`;
+    const url = `${apiEndpoint}forecast?q=${ubicacion},${pais}&units=metric&appid=${apiKey}&lang=es`;
 
     fetch(url)
         .then(response => {
@@ -70,3 +70,46 @@ function mostrarClimaActual(data) {
         </div>
     `;
 }
+function obtenerPrediccion(data) {
+    let pronosticoPorDia = {}; // Objeto para almacenar datos por día
+
+    data.list.forEach(item => {
+        const fecha = new Date(item.dt * 1000);
+        const dia = fecha.toLocaleDateString("es-ES", { weekday: "long" }); // Día en español
+
+        if (!pronosticoPorDia[dia]) {
+            pronosticoPorDia[dia] = {
+                min: item.main.temp,
+                max: item.main.temp,
+                icono: item.weather[0].icon,
+                descripcion: item.weather[0].description
+            };
+        } else {
+            pronosticoPorDia[dia].min = Math.min(pronosticoPorDia[dia].min, item.main.temp);
+            pronosticoPorDia[dia].max = Math.max(pronosticoPorDia[dia].max, item.main.temp);
+        }
+    });
+
+    mostrarPrediccion(pronosticoPorDia);
+}
+function mostrarPrediccion(pronostico) {
+    let html = "<h3>Pronóstico para los próximos días:</h3><div class='forecast-container'>";
+
+    Object.keys(pronostico).forEach(dia => {
+        const { min, max, icono, descripcion } = pronostico[dia];
+        const iconUrl = `http://openweathermap.org/img/w/${icono}.png`;
+
+        html += `
+            <div class="forecast-card">
+                <h4>${dia}</h4>
+                <img src="${iconUrl}" alt="${descripcion}">
+                <p>${descripcion.charAt(0).toUpperCase() + descripcion.slice(1)}</p>
+                <p>🌡️ ${min.toFixed(1)}°C - ${max.toFixed(1)}°C</p>
+            </div>
+        `;
+    });
+
+    html += "</div>";
+    document.getElementById("pronostico").innerHTML = html;
+}
+
