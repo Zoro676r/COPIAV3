@@ -22,8 +22,8 @@ body {
 }
 
 .weather-card {
-  width: 200%;
-  max-width: 700px;
+  width: 500%;
+  max-width: 350px;
   background: linear-gradient(235deg, #4caf50, #81c784);
   color: white;
   border-radius: 10px;
