@@ -23,7 +23,7 @@ body {
 
 .weather-card {
   width: 100%;
-  max-width: 600px;
+  max-width: 1500px;
   background: linear-gradient(135deg, #4caf50, #81c784);
   color: white;
   border-radius: 10px;
