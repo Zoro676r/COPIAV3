@@ -16,15 +16,16 @@ function buscarClima() {
     }
 
     climaActualDiv.innerHTML = '<p class="loading">Cargando...</p>';
+    document.getElementById("pronostico").innerHTML = ""; // Limpia el pronóstico anterior
 
     const pais = paisSelect.value;
-    const url = `${apiEndpoint}forecast?q=${ubicacion},${pais}&units=metric&appid=${apiKey}&lang=es`;
+    const urlClima = `${apiEndpoint}weather?q=${ubicacion},${pais}&units=metric&appid=${apiKey}&lang=es`;
+    const urlForecast = `${apiEndpoint}forecast?q=${ubicacion},${pais}&units=metric&appid=${apiKey}&lang=es`;
 
-    fetch(url)
+    // Obtener clima actual
+    fetch(urlClima)
         .then(response => {
-            if (!response.ok) {
-                throw new Error(`Error HTTP: ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
             return response.json();
         })
         .then(data => mostrarClimaActual(data))
@@ -32,7 +33,17 @@ function buscarClima() {
             climaActualDiv.innerHTML = '<p class="error-msg">No se pudo obtener la información del clima.</p>';
             console.error(error);
         });
+
+    // Obtener predicción semanal
+    fetch(urlForecast)
+        .then(response => {
+            if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+            return response.json();
+        })
+        .then(data => obtenerPrediccion(data))
+        .catch(error => console.error("Error obteniendo el pronóstico:", error));
 }
+
 
 function mostrarClimaActual(data) {
     if (data.cod !== 200) {
