@@ -22,19 +22,20 @@ function buscarClima() {
     const urlClima = `${apiEndpoint}weather?q=${ubicacion},${pais}&units=metric&appid=${apiKey}&lang=es`;
     const urlForecast = `${apiEndpoint}forecast?q=${ubicacion},${pais}&units=metric&appid=${apiKey}&lang=es`;
 
-    // Obtener clima actual
     fetch(urlClima)
         .then(response => {
             if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
             return response.json();
         })
-        .then(data => mostrarClimaActual(data))
+        .then(data => {
+            mostrarClimaActual(data);
+            actualizarReloj(data.timezone); // 🔥 MOVIDO AQUÍ
+        })
         .catch(error => {
             climaActualDiv.innerHTML = '<p class="error-msg">No se pudo obtener la información del clima.</p>';
             console.error(error);
         });
 
-    // Obtener predicción semanal
     fetch(urlForecast)
         .then(response => {
             if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
@@ -42,12 +43,7 @@ function buscarClima() {
         })
         .then(data => obtenerPrediccion(data))
         .catch(error => console.error("Error obteniendo el pronóstico:", error));
-        document.getElementById("ciudad").innerText = `${data.name}, ${data.sys.country}`;
-    
-    // Llamar a la función de reloj con la zona horaria de la ciudad
-    actualizarReloj(data.timezone); 
 }
-
 
 function mostrarClimaActual(data) {
     if (data.cod !== 200) {
@@ -55,7 +51,9 @@ function mostrarClimaActual(data) {
         return;
     }
 
-    // Obtener datos adicionales
+    // 🔥 Ahora sí podemos actualizar el nombre de la ciudad aquí
+    document.getElementById("ciudad").innerText = `${data.name}, ${data.sys.country}`;
+
     const timestamp = data.dt * 1000;
     const fecha = new Date(timestamp);
     const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
@@ -82,9 +80,11 @@ function mostrarClimaActual(data) {
             <p>🌅 Amanecer: <strong>${sunriseTime}</strong></p>
             <p>🌄 Atardecer: <strong>${sunsetTime}</strong></p>
             <p class="desc">${condiciones.charAt(0).toUpperCase() + condiciones.slice(1)}</p>
+            <p id="reloj">🕒 Cargando hora...</p> <!-- 🔥 Aquí aparecerá la hora -->
         </div>
     `;
 }
+
 function obtenerPrediccion(data) {
     let pronosticoPorDia = {}; // Objeto para almacenar datos por día
 
