@@ -56,7 +56,7 @@ function mostrarClimaActual(data) {
 
     const timestamp = data.dt * 1000;
     const fecha = new Date(timestamp);
-    const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+    const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
     const diaSemana = diasSemana[fecha.getDay()];
 
     const temperatura = data.main.temp;
