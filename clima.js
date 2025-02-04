@@ -42,6 +42,10 @@ function buscarClima() {
         })
         .then(data => obtenerPrediccion(data))
         .catch(error => console.error("Error obteniendo el pronóstico:", error));
+        document.getElementById("ciudad").innerText = `${data.name}, ${data.sys.country}`;
+    
+    // Llamar a la función de reloj con la zona horaria de la ciudad
+    actualizarReloj(data.timezone); 
 }
 
 
@@ -140,3 +144,14 @@ function obtenerUbicacion() {
         alert("Tu navegador no admite geolocalización.");
     }
 }
+function actualizarReloj(timezone) {
+    function mostrarHora() {
+        const ahora = new Date();
+        const utc = ahora.getTime() + ahora.getTimezoneOffset() * 60000;
+        const horaLocal = new Date(utc + (timezone * 1000));
+        document.getElementById("reloj").innerText = `🕒 Hora local: ${horaLocal.toLocaleTimeString()}`;
+    }
+    mostrarHora(); // Muestra la hora inmediatamente
+    setInterval(mostrarHora, 1000); // Actualiza cada segundo
+}
+
