@@ -124,3 +124,19 @@ function mostrarPrediccion(pronostico) {
     document.getElementById("pronostico").innerHTML = html;
 }
 
+function obtenerUbicacion() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(pos => {
+            const lat = pos.coords.latitude;
+            const lon = pos.coords.longitude;
+            const url = `${apiEndpoint}weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}&lang=es`;
+            
+            fetch(url)
+                .then(res => res.json())
+                .then(data => mostrarClimaActual(data))
+                .catch(err => console.error("Error obteniendo ubicación:", err));
+        });
+    } else {
+        alert("Tu navegador no admite geolocalización.");
+    }
+}
