@@ -56,7 +56,7 @@ function mostrarClimaActual(data) {
 
     const timestamp = data.dt * 1000;
     const fecha = new Date(timestamp);
-    const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+    const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
     const diaSemana = diasSemana[fecha.getDay()];
 
     const temperatura = data.main.temp;
@@ -75,7 +75,7 @@ function mostrarClimaActual(data) {
             <p>📅 Día: <strong>${diaSemana}</strong></p>
             <img src="${iconUrl}" alt="${condiciones}">
             <p class="temp">${temperatura}°C</p>
-            <p>🐳 Humedad: ${humedad}%</p>
+            <p>Humedad: ${humedad}%</p>
             <p>💨 Viento: <strong>${viento} m/s</strong></p>
             <p>🌅 Amanecer: <strong>${sunriseTime}</strong></p>
             <p>🌄 Atardecer: <strong>${sunsetTime}</strong></p>
