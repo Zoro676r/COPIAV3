@@ -116,7 +116,7 @@ function mostrarPrediccion(pronostico) {
 
         html += `
             <div class="forecast-card">
-                <h4>${dia}</h4>
+                <h4>${dia+1}</h4>
                 <img src="${iconUrl}" alt="${descripcion}">
                 <p>${descripcion.charAt(0).toUpperCase() + descripcion.slice(1)}</p>
                 <p>🌡️ ${min.toFixed(1)}°C - ${max.toFixed(1)}°C</p>
