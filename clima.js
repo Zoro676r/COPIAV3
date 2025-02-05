@@ -132,7 +132,7 @@ function mostrarPrediccion(pronostico, fechas) {
             `;
 
             diasMostrados++;
-            if (diasMostrados === 5) break; // 🔥 Asegurar que mostramos 5 días exactos
+            // 🔥 Asegurar que mostramos 5 días exactos
         }
     }
 
