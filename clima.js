@@ -112,7 +112,7 @@ function mostrarPrediccion(pronostico) {
 
     Object.keys(pronostico).forEach(dia => {
         if(dia !== hoy){
-        const { min, max, icono, descripcion } = pronostico[dia+1];
+        const { min, max, icono, descripcion } = pronostico[dia];
         const iconUrl = `http://openweathermap.org/img/w/${icono}.png`;
 
         html += `
