@@ -86,47 +86,55 @@ function mostrarClimaActual(data) {
 }
 
 function obtenerPrediccion(data) {
-    let pronosticoPorDia = {}; // Objeto para almacenar datos por día
+    let pronosticoPorDia = {}; 
+    let fechasGuardadas = []; // 🔥 Para asegurarnos de mostrar siempre 5 días
 
     data.list.forEach(item => {
         const fecha = new Date(item.dt * 1000);
-        const dia = fecha.toLocaleDateString("es-ES", { weekday: "long" }); // Día en español
+        const dia = fecha.toLocaleDateString("es-ES", { weekday: "long" }); // Nombre del día
+        const fechaClave = fecha.toISOString().split("T")[0]; // 🔥 Guardamos la fecha YYYY-MM-DD para comparaciones exactas
 
-        if (!pronosticoPorDia[dia]) {
-            pronosticoPorDia[dia] = {
+        if (!pronosticoPorDia[fechaClave]) {
+            pronosticoPorDia[fechaClave] = {
+                diaNombre: dia,
                 min: item.main.temp,
                 max: item.main.temp,
                 icono: item.weather[0].icon,
                 descripcion: item.weather[0].description
             };
+            fechasGuardadas.push(fechaClave);
         } else {
-            pronosticoPorDia[dia].min = Math.min(pronosticoPorDia[dia].min, item.main.temp);
-            pronosticoPorDia[dia].max = Math.max(pronosticoPorDia[dia].max, item.main.temp);
+            pronosticoPorDia[fechaClave].min = Math.min(pronosticoPorDia[fechaClave].min, item.main.temp);
+            pronosticoPorDia[fechaClave].max = Math.max(pronosticoPorDia[fechaClave].max, item.main.temp);
         }
     });
 
-    mostrarPrediccion(pronosticoPorDia);
+    mostrarPrediccion(pronosticoPorDia, fechasGuardadas);
 }
-function mostrarPrediccion(pronostico) {
+
+function mostrarPrediccion(pronostico, fechas) {
     let html = "<h3>Pronóstico para los próximos días:</h3><div class='forecast-container'>";
+    const hoy = new Date().toISOString().split("T")[0]; // 🔥 Fecha exacta de hoy
 
-    const hoy = new Date().toLocaleDateString("es-ES", { weekday: "long" });
-
-    Object.keys(pronostico).forEach(dia => {
-        if (dia !== hoy) { // 🔥 Excluir el día actual
-            const { min, max, icono, descripcion } = pronostico[dia];
+    let diasMostrados = 0;
+    for (let i = 0; i < fechas.length; i++) {
+        if (fechas[i] !== hoy) { // Excluir hoy
+            const { diaNombre, min, max, icono, descripcion } = pronostico[fechas[i]];
             const iconUrl = `http://openweathermap.org/img/w/${icono}.png`;
 
             html += `
                 <div class="forecast-card">
-                    <h4>${dia}</h4>
+                    <h4>${diaNombre}</h4>
                     <img src="${iconUrl}" alt="${descripcion}">
                     <p>${descripcion.charAt(0).toUpperCase() + descripcion.slice(1)}</p>
                     <p>🌡️ ${min.toFixed(1)}°C - ${max.toFixed(1)}°C</p>
                 </div>
             `;
+
+            diasMostrados++;
+            if (diasMostrados === 5) break; // 🔥 Asegurar que mostramos 5 días exactos
         }
-    });
+    }
 
     html += "</div>";
     document.getElementById("pronostico").innerHTML = html;
