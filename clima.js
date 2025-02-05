@@ -86,17 +86,17 @@ function mostrarClimaActual(data) {
 }
 
 function obtenerPrediccion(data) {
-    let pronosticoPorDia = {}; 
-    let fechasGuardadas = []; // 🔥 Para asegurarnos de mostrar siempre 5 días
+    let pronosticoPorDia = {};
+    let fechasGuardadas = [];
 
     data.list.forEach(item => {
         const fecha = new Date(item.dt * 1000);
-        const dia = fecha.toLocaleDateString("es-ES", { weekday: "long" }); // Nombre del día
-        const fechaClave = fecha.toISOString().split("T")[0]; // 🔥 Guardamos la fecha YYYY-MM-DD para comparaciones exactas
+        const fechaClave = fecha.toISOString().split("T")[0]; // 🔥 Fecha en formato YYYY-MM-DD
+        const diaNombre = fecha.toLocaleDateString("es-ES", { weekday: "long" }); // Nombre del día en español
 
         if (!pronosticoPorDia[fechaClave]) {
             pronosticoPorDia[fechaClave] = {
-                diaNombre: dia,
+                diaNombre: diaNombre,
                 min: item.main.temp,
                 max: item.main.temp,
                 icono: item.weather[0].icon,
@@ -118,7 +118,7 @@ function mostrarPrediccion(pronostico, fechas) {
 
     let diasMostrados = 0;
     for (let i = 0; i < fechas.length; i++) {
-        if (fechas[i] !== hoy) { // Excluir hoy
+        if (fechas[i] !== hoy) { // Excluir el día actual
             const { diaNombre, min, max, icono, descripcion } = pronostico[fechas[i]];
             const iconUrl = `http://openweathermap.org/img/w/${icono}.png`;
 
@@ -132,13 +132,14 @@ function mostrarPrediccion(pronostico, fechas) {
             `;
 
             diasMostrados++;
-            // 🔥 Asegurar que mostramos 5 días exactos
+            if (diasMostrados === 6) break; // 🔥 Mostrar exactamente 6 días
         }
     }
 
     html += "</div>";
     document.getElementById("pronostico").innerHTML = html;
 }
+
 
 function obtenerUbicacion() {
     if (navigator.geolocation) {
