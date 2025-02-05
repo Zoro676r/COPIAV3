@@ -111,13 +111,12 @@ function mostrarPrediccion(pronostico) {
     let html = "<h3>Pronóstico para los próximos días:</h3><div class='forecast-container'>";
 
     Object.keys(pronostico).forEach(dia => {
-        dia.next();
         const { min, max, icono, descripcion } = pronostico[dia];
         const iconUrl = `http://openweathermap.org/img/w/${icono}.png`;
 
         html += `
             <div class="forecast-card">
-                <h4>${dia}</h4>
+                <h4>${dia.next()}</h4>
                 <img src="${iconUrl}" alt="${descripcion}">
                 <p>${descripcion.charAt(0).toUpperCase() + descripcion.slice(1)}</p>
                 <p>🌡️ ${min.toFixed(1)}°C - ${max.toFixed(1)}°C</p>
