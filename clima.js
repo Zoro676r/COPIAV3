@@ -45,102 +45,52 @@ function buscarClima() {
         .catch(error => console.error("Error obteniendo el pronóstico:", error));
 }
 
-function mostrarClimaActual(data) {
-    if (data.cod !== 200) {
-        climaActualDiv.innerHTML = `<p class="error-msg">Error: ${data.message}</p>`;
-        return;
-    }
-
-    // 🔥 Ahora sí podemos actualizar el nombre de la ciudad aquí
-    document.getElementById("ciudad").innerText = `${data.name}, ${data.sys.country}`;
-
-    const timestamp = data.dt * 1000;
-    const fecha = new Date(timestamp);
-    const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-    const diaSemana = diasSemana[fecha.getDay()];
-
-    const temperatura = data.main.temp;
-    const humedad = data.main.humidity;
-    const condiciones = data.weather[0].description;
-    const icono = data.weather[0].icon;
-    const iconUrl = `http://openweathermap.org/img/w/${icono}.png`;
-
-    const sunriseTime = new Date(data.sys.sunrise * 1000).toLocaleTimeString("es-ES");
-    const sunsetTime = new Date(data.sys.sunset * 1000).toLocaleTimeString("es-ES");
-    const viento = data.wind.speed;
-
-    climaActualDiv.innerHTML = `
-        <div class="weather-card">
-            <h3>${data.name}, ${data.sys.country}</h3>
-            <p>📅 Día: <strong>${diaSemana}</strong></p>
-            <img src="${iconUrl}" alt="${condiciones}">
-            <p class="temp">${temperatura}°C</p>
-            <p>🐳 Humedad: ${humedad}%</p>
-            <p>💨 Viento: <strong>${viento} m/s</strong></p>
-            <p>🌅 Amanecer: <strong>${sunriseTime}</strong></p>
-            <p>🌄 Atardecer: <strong>${sunsetTime}</strong></p>
-            <p class="desc">${condiciones.charAt(0).toUpperCase() + condiciones.slice(1)}</p>
-            <p id="reloj">🕒 Cargando hora...</p> <!-- 🔥 Aquí aparecerá la hora -->
-        </div>
-    `;
-}
-
 function obtenerPrediccion(data) {
-    let pronosticoPorDia = {};
-    let fechasGuardadas = [];
+    let pronosticoPorDia = {}; // Objeto para almacenar datos por día
 
     data.list.forEach(item => {
         const fecha = new Date(item.dt * 1000);
-        const fechaClave = fecha.toISOString().split("T")[0]; // 🔥 Fecha en formato YYYY-MM-DD
-        const diaNombre = fecha.toLocaleDateString("es-ES", { weekday: "long" }); // Nombre del día en español
+        const dia = fecha.toLocaleDateString("es-ES", { weekday: "long" }); // Día en español
 
-        if (!pronosticoPorDia[fechaClave]) {
-            pronosticoPorDia[fechaClave] = {
-                diaNombre: diaNombre,
+        if (!pronosticoPorDia[dia]) {
+            pronosticoPorDia[dia] = {
                 min: item.main.temp,
                 max: item.main.temp,
                 icono: item.weather[0].icon,
                 descripcion: item.weather[0].description
             };
-            fechasGuardadas.push(fechaClave);
         } else {
-            pronosticoPorDia[fechaClave].min = Math.min(pronosticoPorDia[fechaClave].min, item.main.temp);
-            pronosticoPorDia[fechaClave].max = Math.max(pronosticoPorDia[fechaClave].max, item.main.temp);
+            pronosticoPorDia[dia].min = Math.min(pronosticoPorDia[dia].min, item.main.temp);
+            pronosticoPorDia[dia].max = Math.max(pronosticoPorDia[dia].max, item.main.temp);
         }
     });
 
-    mostrarPrediccion(pronosticoPorDia, fechasGuardadas);
+    mostrarPrediccion(pronosticoPorDia);
 }
-
-function mostrarPrediccion(pronostico, fechas) {
+function mostrarPrediccion(pronostico) {
     let html = "<h3>Pronóstico para los próximos días:</h3><div class='forecast-container'>";
-    const hoy = new Date().toISOString().split("T")[0]; // 🔥 Fecha exacta de hoy
 
-    let diasMostrados = 0;
-    for (let i = 0; i < fechas.length; i++) {
-        if (fechas[i] !== hoy) { // Excluir el día actual
-            const { diaNombre, min, max, icono, descripcion } = pronostico[fechas[i]];
-            const iconUrl = `http://openweathermap.org/img/w/${icono}.png`;
+    const hoy = new Date().toLocaleDateString("es-ES", { weekday: "long" });
+
+    Object.keys(pronostico).forEach(dia => {
+        if (dia !== hoy) { // 🔥 Excluir el día actual
+            const { min, max, icono, descripcion } = pronostico[dia];
+            const iconUrl = http://openweathermap.org/img/w/${icono}.png;
 
             html += `
                 <div class="forecast-card">
-                    <h4>${diaNombre}</h4>
+                    <h4>${dia}</h4>
                     <img src="${iconUrl}" alt="${descripcion}">
                     <p>${descripcion.charAt(0).toUpperCase() + descripcion.slice(1)}</p>
-                    <p>🌡️ ${min.toFixed(1)}°C - ${max.toFixed(1)}°C</p>
+                    <p>🌡 ${min.toFixed(1)}°C - ${max.toFixed(1)}°C</p>
                 </div>
             `;
-
-            diasMostrados++;
-            if (diasMostrados === 6) break; // 🔥 Mostrar exactamente 6 días
         }
-    }
+    });
 
     html += "</div>";
     document.getElementById("pronostico").innerHTML = html;
 }
-
-
 function obtenerUbicacion() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(pos => {
