@@ -75,14 +75,14 @@ function mostrarPrediccion(pronostico) {
     Object.keys(pronostico).forEach(dia => {
         if (dia !== hoy) { // 🔥 Excluir el día actual
             const { min, max, icono, descripcion } = pronostico[dia];
-            const iconUrl = http://openweathermap.org/img/w/${icono}.png;
+            const iconUrl = `http://openweathermap.org/img/w/${icono}.png`;
 
             html += `
                 <div class="forecast-card">
                     <h4>${dia}</h4>
                     <img src="${iconUrl}" alt="${descripcion}">
                     <p>${descripcion.charAt(0).toUpperCase() + descripcion.slice(1)}</p>
-                    <p>🌡 ${min.toFixed(1)}°C - ${max.toFixed(1)}°C</p>
+                    <p>🌡️ ${min.toFixed(1)}°C - ${max.toFixed(1)}°C</p>
                 </div>
             `;
         }
@@ -91,6 +91,7 @@ function mostrarPrediccion(pronostico) {
     html += "</div>";
     document.getElementById("pronostico").innerHTML = html;
 }
+
 function obtenerUbicacion() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(pos => {
