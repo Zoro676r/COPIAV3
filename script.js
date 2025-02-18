@@ -112,6 +112,38 @@ function mostrarGrafico(requisitos) {
             }
         }
     });
+    // WebSocket para recibir datos del ESP32
+const socket = new WebSocket('ws://192.168.0.33:81'); // Reemplaza <IP_DEL_ESP32> con la IP del ESP32
+
+socket.onopen = function(event) {
+    console.log("Conexión WebSocket establecida.");
+};
+
+socket.onmessage = function(event) {
+    const data = JSON.parse(event.data);
+    console.log("Datos recibidos:", data);
+
+    // Actualizar los valores en la página
+    document.getElementById("temperatura").textContent = data.temperatura.toFixed(2);
+    document.getElementById("humedad").textContent = data.humedad.toFixed(2);
+    document.getElementById("luz").textContent = data.luz;
+};
+
+socket.onerror = function(error) {
+    console.error("Error en WebSocket:", error);
+};
+
+socket.onclose = function(event) {
+    console.log("Conexión WebSocket cerrada.");
+};
+
+function monitorearCultivo() {
+    document.getElementById("monitoreoResultados").innerHTML = `
+        <p>Temperatura: <span id="temperatura">--</span>°C</p>
+        <p>Humedad: <span id="humedad">--</span>%</p>
+        <p>Luz: <span id="luz">--</span> lux</p>
+    `;
+}
 }
 
 function monitorearCultivo() {
