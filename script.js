@@ -112,8 +112,10 @@ function mostrarGrafico(requisitos) {
             }
         }
     });
-    // WebSocket para recibir datos del ESP32
-const socket = new WebSocket('ws://192.168.0.33:81'); // Reemplaza <IP_DEL_ESP32> con la IP del ESP32
+}
+
+// WebSocket para recibir datos del ESP32
+const socket = new WebSocket('ws://192.168.0.33:81'); // Reemplaza con la IP de tu ESP32
 
 socket.onopen = function(event) {
     console.log("Conexión WebSocket establecida.");
@@ -137,6 +139,7 @@ socket.onclose = function(event) {
     console.log("Conexión WebSocket cerrada.");
 };
 
+// Función monitorearCultivo
 function monitorearCultivo() {
     document.getElementById("monitoreoResultados").innerHTML = `
         <p>Temperatura: <span id="temperatura">--</span>°C</p>
@@ -144,8 +147,10 @@ function monitorearCultivo() {
         <p>Luz: <span id="luz">--</span> lux</p>
     `;
 }
-}
 
-function monitorearCultivo() {
-    document.getElementById("monitoreoResultados").innerHTML = "<p>Monitoreo en proceso...</p>";
-}
+// Asegúrate de que el código se ejecute solo cuando el DOM esté completamente cargado
+document.addEventListener("DOMContentLoaded", function() {
+    // Asignar los eventos a los botones
+    document.getElementById("analizar").addEventListener("click", analizarCultivo);
+    document.getElementById("monitorear").addEventListener("click", monitorearCultivo);
+});
