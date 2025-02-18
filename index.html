@@ -142,14 +142,6 @@
         <div id="pronostico"></div>
 
 </div>
-<div id="clima-widget">
-    <h2>Datos del Sensor</h2>
-    <div class="weather-card">
-        <p id="temperatura">Cargando temperatura...</p>
-        <p id="humedad">Cargando humedad...</p>
-        <p id="luz">Cargando luz ambiente...</p>
-    </div>
-</div>
 
 <script src="clima.js"></script>
         <!-- Análisis de condiciones del suelo -->
@@ -195,25 +187,3 @@
 </body>
 
 </html>
-<script>
-    async function obtenerDatos() {
-        const url = 'https://raw.githubusercontent.com/Zoro676r/COPIAV3/main/datos_sensores.json';
-
-        try {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error('Error al obtener los datos');
-
-            const datos = await response.json();
-            
-            document.getElementById('temperatura').innerText = `Temperatura: ${datos.temperatura} °C`;
-            document.getElementById('humedad').innerText = `Humedad: ${datos.humedad} %`;
-            document.getElementById('luz').innerText = `Luz ambiente: ${datos.luz} lux`;
-
-        } catch (error) {
-            console.error('Error al obtener los datos:', error);
-        }
-    }
-
-    window.onload = obtenerDatos;
-    setInterval(obtenerDatos, 60000); // Actualiza cada minuto
-</script>

@@ -55,12 +55,6 @@ function mostrarGrafico(requisitos) {
         chart.destroy();
     }
 
-    // Se asegura de que los valores de luminosidad, precipitación, humedad y temperatura sean correctos
-    const luminosidadMin = requisitos.luminosidad.includes('-') ? parseFloat(requisitos.luminosidad.split('-')[0]) : parseFloat(requisitos.luminosidad);
-    const precipitacionMin = parseFloat(requisitos.precipitacion.split('-')[0]);
-    const humedadMin = parseFloat(requisitos.humedad.split('-')[0]);
-    const temperaturaMin = parseFloat(requisitos.temperatura.split('-')[0]);
-
     chart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -68,7 +62,12 @@ function mostrarGrafico(requisitos) {
             datasets: [
                 {
                     label: 'Requisitos óptimos',
-                    data: [luminosidadMin, precipitacionMin, humedadMin, temperaturaMin],
+                    data: [
+                        parseFloat(requisitos.luminosidad.split('-')[0]),
+                        parseFloat(requisitos.precipitacion.split('-')[0]),
+                        parseFloat(requisitos.humedad.split('-')[0]),
+                        parseFloat(requisitos.temperatura.split('-')[0])
+                    ],
                     backgroundColor: 'rgba(76, 175, 80, 0.8)',
                     borderColor: 'rgba(76, 175, 80, 1)',
                     borderWidth: 1
