@@ -173,10 +173,14 @@
         </section>
 
         <section id="monitoreo" class="mb-5">
-            <h2>Monitoreo de Cultivo</h2>
-            <button class="btn btn-success" onclick="monitorearCultivo()">Monitorear</button>
-            <div id="monitoreoResultados" class="mt-4"></div>
-        </section>
+    <h2>Monitoreo de Cultivo</h2>
+    <button class="btn btn-success" onclick="monitorearCultivo()">Monitorear</button>
+    <div id="monitoreoResultados" class="mt-4">
+        <p>Temperatura: <span id="temperatura">--</span>°C</p>
+        <p>Humedad: <span id="humedad">--</span>%</p>
+        <p>Luz: <span id="luz">--</span> lux</p>
+    </div>
+</section>
     </div>
 
     <footer class="bg-success text-white text-center py-3">
