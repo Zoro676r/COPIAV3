@@ -97,3 +97,15 @@ body {
     padding: 15px;
   }
 }
+#monitoreoResultados {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+#monitoreoResultados p {
+    font-size: 1.2em;
+    margin: 10px 0;
+}
